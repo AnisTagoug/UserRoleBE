@@ -18,7 +18,9 @@ public class AppUser {
     @Column(unique = true)
     private String username;
     @Column(name = "Email")
-    public String email;
+    private String email;
+    @Column (name = "Etat")
+    private Boolean etat ;
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
     private boolean actived;

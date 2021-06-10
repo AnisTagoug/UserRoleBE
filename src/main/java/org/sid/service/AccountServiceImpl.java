@@ -22,7 +22,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public AppUser saveUser(String username, String password, String confirmedPassword, String email) {
+    public AppUser saveUser(String username, String password, String confirmedPassword, String email , Boolean etat) {
         AppUser  user=appUserRepository.findByUsername(username);
         if(user!=null) throw new RuntimeException("User already exists");
         if(!password.equals(confirmedPassword)) throw new RuntimeException("Please confirm your password");
@@ -31,22 +31,13 @@ public class AccountServiceImpl implements AccountService {
         appUser.setEmail(email);
         appUser.setActived(true);
         appUser.setPassword(bCryptPasswordEncoder.encode(password));
+        appUser.setEtat(true);
         appUserRepository.save(appUser);
         addRoleToUser(username,"USER");
         return appUser;
     }
-    public AppUser saveupdate(String username, String email) {
-        AppUser user = appUserRepository.findByUsername(username);
-        if (user != null) throw new RuntimeException("User already exists");
 
-        AppUser appUser = new AppUser();
-        appUser.setUsername(username);
-        appUser.setEmail(email);
-        appUser.setActived(true);
-        appUserRepository.save(appUser);
-        addRoleToUser(username, "USER");
-        return appUser;
-    }
+
 
     @Override
     public AppRole save(AppRole role) {
@@ -64,4 +55,6 @@ public class AccountServiceImpl implements AccountService {
         AppRole appRole=appRoleRepository.findByRoleName(rolename);
         appUser.getRoles().add(appRole);
     }
+
+
 }
