@@ -1,6 +1,7 @@
 package org.sid.web;
 
 import lombok.Data;
+import net.bytebuddy.asm.Advice;
 import org.sid.dao.AppUserRepository;
 import org.sid.entities.AppUser;
 import org.sid.service.AccountService;
@@ -8,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -32,6 +34,12 @@ public class UserController {
     public AppUser register(@RequestBody  UserForm userForm){
         return  accountService.saveUser(
                 userForm.getUsername(),userForm.getPassword(),userForm.getConfirmedPassword(),userForm.getEmail(),userForm.getEtat());
+    }
+    @GetMapping("/User/{username}")
+    public ResponseEntity<AppUser> getUserById(@PathVariable String username) {
+        AppUser appUser = appUserRepository.findByUsername(username);
+        if(appUser==null) throw new UsernameNotFoundException("User doesn't exist with username "+ username);
+        return ResponseEntity.ok(appUser);
     }
     @PutMapping("/update/{username}")
     public ResponseEntity<AppUser> updateServor(@PathVariable String username, @RequestBody AppUser userDetails ){
