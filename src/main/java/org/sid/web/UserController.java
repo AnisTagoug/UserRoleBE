@@ -36,7 +36,7 @@ public class UserController {
                 userForm.getUsername(),userForm.getPassword(),userForm.getConfirmedPassword(),userForm.getEmail(),userForm.getEtat());
     }
     @GetMapping("/User/{username}")
-    public ResponseEntity<AppUser> getUserById(@PathVariable String username) {
+    public ResponseEntity<AppUser> getUserByUsername(@PathVariable String username) {
         AppUser appUser = appUserRepository.findByUsername(username);
         if(appUser==null) throw new UsernameNotFoundException("User doesn't exist with username "+ username);
         return ResponseEntity.ok(appUser);
